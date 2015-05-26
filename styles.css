@@ -1,0 +1,63 @@
+﻿#iOSUXBar {
+    border-top: 1px #bbbbbb solid;
+    border-bottom: 1px #bbbbbb solid;
+    padding: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.btniOSUX {  
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #c2c2c2;
+    border-radius: 2px;
+}
+
+.separator {
+    margin-left: 20px;
+}
+
+#fontbold {
+    background-image: url('images/fontbold.png');
+}
+
+#fontitalic {
+    background-image: url('images/fontitalic.png');
+}
+
+#listbullet {
+    background-image: url('images/listbullet.png');
+}
+
+#liststructured {
+    background-image: url('images/liststructured.png');
+}
+
+.btniOSUX:hover {
+    background-color: #d5e1f2;
+}
+
+.btniOSUX-selected {
+    background-color: #c2d5f2;
+}
+
+
+#TextControl1 {
+    margin-bottom: 0;
+}
+
+#ribbonbar {
+    display: none;
+}
+
+body {
+    margin: 0;
+}
