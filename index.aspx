@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="tx_touch_formattingbar.index" %>
 
-<%@ Register assembly="TXTextControl.Web, Version=22.0.200.500, Culture=neutral, PublicKeyToken=6b83fe9a75cfb638" namespace="TXTextControl.Web" tagprefix="cc1" %>
+<%@ Register assembly="TXTextControl.Web, Version=31.0.1100.500, Culture=neutral, PublicKeyToken=6b83fe9a75cfb638" namespace="TXTextControl.Web" tagprefix="cc1" %>
 
 <!DOCTYPE html>
 
@@ -24,8 +24,14 @@
         <cc1:TextControl ID="TextControl1" runat="server" />
     
         <script>
-            // enable hidden commands
-            TXTextControl.enableCommands();
+            TXTextControl.addEventListener("textControlLoaded", function (e) {
+                // these events are fired, if the format at the current
+                // input position is changed
+                TXTextControl.inputFormat.addEventListener("boldChanged", boldChangedHandler);
+                TXTextControl.inputFormat.addEventListener("italicChanged", italicChangedHandler);
+                TXTextControl.inputFormat.addEventListener("bulletedListChanged", bulletedListChangedHandler);
+                TXTextControl.inputFormat.addEventListener("structuredListChanged", structuredListChangedHandler);
+            });
 
             // remove the ribbon and status bar
             TXTextControl.addEventListener("ribbonTabsLoaded", function (e) {
@@ -38,12 +44,12 @@
                 $('#fontbold').click(function(){
                     if ($(this).hasClass('btniOSUX-selected')) {
                         $(this).removeClass('btniOSUX-selected');
-                        TXTextControl.sendCommand(TXTextControl.Command.InputFormat, TXTextControl.InputFormatProperty.Bold, 0);
+                        TXTextControl.inputFormat.setBold(false);
                     } 
                     else
                     {
                         $(this).addClass('btniOSUX-selected');
-                        TXTextControl.sendCommand(TXTextControl.Command.InputFormat, TXTextControl.InputFormatProperty.Bold, 1);
+                        TXTextControl.inputFormat.setBold(true);
                     }
 
                     TXTextControl.focus();
@@ -52,11 +58,11 @@
                 $('#fontitalic').click(function () {
                     if ($(this).hasClass('btniOSUX-selected')) {
                         $(this).removeClass('btniOSUX-selected');
-                        TXTextControl.sendCommand(TXTextControl.Command.InputFormat, TXTextControl.InputFormatProperty.Italic, 0);
+                        TXTextControl.inputFormat.setItalic(false);
                     }
                     else {
                         $(this).addClass('btniOSUX-selected');
-                        TXTextControl.sendCommand(TXTextControl.Command.InputFormat, TXTextControl.InputFormatProperty.Italic, 1);
+                        TXTextControl.inputFormat.setItalic(true);
                     }
 
                     TXTextControl.focus();
@@ -65,11 +71,11 @@
                 $('#listbullet').click(function () {
                     if ($(this).hasClass('btniOSUX-selected')) {
                         $(this).removeClass('btniOSUX-selected');
-                        TXTextControl.sendCommand(TXTextControl.Command.InputFormat, TXTextControl.InputFormatProperty.BulletedList, 0);
+                        TXTextControl.inputFormat.setBulletedList(false);
                     }
                     else {
                         $(this).addClass('btniOSUX-selected');
-                        TXTextControl.sendCommand(TXTextControl.Command.InputFormat, TXTextControl.InputFormatProperty.BulletedList, 1);
+                        TXTextControl.inputFormat.setBulletedList(true);
                     }
 
                     TXTextControl.focus();
@@ -78,56 +84,44 @@
                 $('#liststructured').click(function () {
                     if ($(this).hasClass('btniOSUX-selected')) {
                         $(this).removeClass('btniOSUX-selected');
-                        TXTextControl.sendCommand(TXTextControl.Command.InputFormat, TXTextControl.InputFormatProperty.StructuredList, 0);
+                        TXTextControl.inputFormat.setStructuredList(false);
                     }
                     else {
                         $(this).addClass('btniOSUX-selected');
-                        TXTextControl.sendCommand(TXTextControl.Command.InputFormat, TXTextControl.InputFormatProperty.StructuredList, 1);
+                        TXTextControl.inputFormat.setStructuredList(true);
                     }
 
                     TXTextControl.focus();
                 })
-            });
-
-            // this event is fired, if the format at the current
-            // input position is changed
-            document.addEventListener("inputFormatReceived", inputFormatReceivedHandler);
-
-            // process the message
-            function inputFormatReceivedHandler(e) {
-                var msg = e.detail;
-
-                if (msg.hasOwnProperty("Bold")) inputFormatChanged(TXTextControl.InputFormatProperty.Bold, msg.Bold);
-                if (msg.hasOwnProperty("Italic")) inputFormatChanged(TXTextControl.InputFormatProperty.Italic, msg.Italic);
-                if (msg.hasOwnProperty("BulletedList")) inputFormatChanged(TXTextControl.InputFormatProperty.BulletedList, msg.BulletedList);
-                if (msg.hasOwnProperty("StructuredList")) inputFormatChanged(TXTextControl.InputFormatProperty.StructuredList, msg.StructuredList);
-            }
+            });            
 
             // set the state of the new buttons to reflect the input format
-            function inputFormatChanged(id, value, stringValue) {
-                var btns = null;
+            function boldChangedHandler(e) {
+                var value = e.newValue;
+                var btn = $("#fontbold");
+                if (value) btn.addClass('btniOSUX-selected');
+                else btn.removeClass('btniOSUX-selected');
+            }
 
-                switch (id) {
-                    case TXTextControl.InputFormatProperty.Bold:
-                        btns = [$("#fontbold")];
-                        break;
-                    case TXTextControl.InputFormatProperty.Italic:
-                        btns = [$("#fontitalic")];
-                        break;
-                    case TXTextControl.InputFormatProperty.BulletedList:
-                        btns = [$("#listbullet")];
-                        break;
-                    case TXTextControl.InputFormatProperty.StructuredList:
-                        btns = [$("#liststructured")];
-                        break;
-                }
+            function italicChangedHandler(e) {
+                var value = e.newValue;
+                var btn = $("#fontitalic");
+                if (value) btn.addClass('btniOSUX-selected');
+                else btn.removeClass('btniOSUX-selected');
+            }
 
-                if (btns) {
-                    btns.forEach(function (btn) {
-                        if (value) btn.addClass('btniOSUX-selected');
-                        else btn.removeClass('btniOSUX-selected');
-                    });
-                }
+            function bulletedListChangedHandler(e) {
+                var value = e.newValue;
+                var btn = $("#listbullet");
+                if (value) btn.addClass('btniOSUX-selected');
+                else btn.removeClass('btniOSUX-selected');
+            }
+
+            function structuredListChangedHandler(e) {
+                var value = e.newValue;
+                var btn = $("#liststructured");
+                if (value) btn.addClass('btniOSUX-selected');
+                else btn.removeClass('btniOSUX-selected');
             }
 
         </script>
