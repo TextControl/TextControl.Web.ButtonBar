@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="tx_touch_formattingbar.index" %>
 
-<%@ Register assembly="TXTextControl.Web, Version=31.0.1100.500, Culture=neutral, PublicKeyToken=6b83fe9a75cfb638" namespace="TXTextControl.Web" tagprefix="cc1" %>
+<%@ Register assembly="TXTextControl.Web, Version=32.0.1200.500, Culture=neutral, PublicKeyToken=6b83fe9a75cfb638" namespace="TXTextControl.Web" tagprefix="cc1" %>
 
 <!DOCTYPE html>
 
@@ -8,7 +8,7 @@
 <head runat="server">
     <title>TX Text Control Sample: Formatting Bar</title>
     <link href="styles.css" rel="stylesheet" />
-    <script src="Scripts/jquery-2.1.4.js"></script>
+    <script src="Scripts/jquery-3.6.0.js"></script>
 </head>
 <body>
     <form id="form1" runat="server">
